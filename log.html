@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>log</title>
+    <style>
+        /* 공통 */
+        * {
+            box-sizing: border-box; 
+            margin: 0; padding: 0;
+        }
+        ul {
+            list-style-type: none;
+        }
+        body {
+            font-family: "Pretendard", "Malgun Gothic", "돋움", sans-serif;
+            font-size: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+        
+        /* 반응형 */
+        [class*="c_"] {
+            float: left; padding: 15px; width: 100%;
+        }
+        @media only screen and (min-width: 600px) {
+            .c_m_3 {width: 25%;}
+            .c_m_6 {width: 50%;}
+            .c_m_9 {width: 75%;}
+            .c_m_12 {width: 100%;}
+        }
+        @media only screen and (min-width: 768px) {
+            .c_3 {width: 25%;}
+            .c_6 {width: 50%;}
+            .c_12 {width: 100%;}
+        }
+
+        /* 헤더 */
+        header {
+            padding: 35px 20px;
+            background-color: #1e272e;
+            color: #ffffff;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            letter-spacing: -1px;
+        }
+        header h1 a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* left 메뉴 */
+        aside#menu {
+            padding-top: 25px;
+        }
+        aside#menu ul {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        aside#menu li {
+            background-color: #ffffff;
+            color: #57606f;
+            font-weight: 500;
+            border: 1px solid #e4e7eb;
+            border-radius: 6px;
+        }
+        aside#menu a {
+            display: block;      
+            padding: 12px 16px;  
+            text-decoration: none; 
+            color: inherit;      
+            border-radius: 6px;  
+        }
+        aside#menu li:hover, aside#menu li.active {
+            background-color: #2c3e50;
+            color: #ffffff;
+            border-color: #2c3e50;
+        }
+        footer {
+            padding: 30px 10px;
+            clear: both;
+            text-align: center;
+            background-color: #1e272e;
+            color: #718093;
+            font-size: 0.85em;
+        }
+
+        /* 메인 컨텐츠 */
+        section#main {
+            padding: 25px 20px;
+        }
+        section#main h1.page-title {
+            font-size: 1.6em;
+            color: #1e272e;
+            margin-bottom: 25px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e4e7eb;
+        }
+
+        /* 갤러리 */
+        .log-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 20px;
+        }
+
+        /* 개별 로그 */
+        .log-item {
+            background-color: #ffffff;
+            border: 1px solid #e4e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .log-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        /* 포스터/표지 이미지 */
+        .log-cover {
+            width: 100%;
+            aspect-ratio: 3 / 4;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* 별점 / 날짜 */
+        .log-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+        }
+        .log-meta .stars {
+            color: #f1c40f;
+            font-size: 1.1em;
+            letter-spacing: 1.5px;
+        }
+        .log-meta .date {
+            font-size: 0.85em;
+            color: #95a5a6;
+            font-weight: 500;
+        }
+
+        /* right 트래커 */
+        aside#tracker {
+            padding-top: 25px;
+        }
+        aside#tracker h4 {
+            font-size: 1.1em;
+            color: #1e272e;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .tracker-box {
+            background-color: #ffffff;
+            border: 1px solid #e4e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+        .tracker-box h5 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .tracker-stat {
+            font-size: 0.85em;
+            color: #57606f;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <header class="c_12">
+        <h1><a href="index.html">📖</a></h1>
+    </header>
+
+    <aside id="menu" class="c_m_3 c_3">
+        <ul>
+            <li><a href="calendar.html">Calendar</a></li> 
+            <li><a href="book.html">Book</a></li>
+            <li><a href="film.html">Film</a></li>
+            <li><a href="quote.html">Quote</a></li>
+            <li class="active"><a href="log.html">Log</a></li> </ul>
+    </aside>
+
+    <section id="main" class="c_m_9 c_6">
+        <h1 class="page-title">Archive Log</h1>
+        
+        <ul class="log-grid">
+            
+            <li class="log-item">
+                <img src="img/log1.jpg" alt="기록 1" class="log-cover">
+                <div class="log-meta">
+                    <span class="stars">★★★★★</span>
+                    <span class="date">2026.05.26</span>
+                </div>
+            </li>
+
+            <li class="log-item">
+                <img src="img/log2.jpg" alt="기록 2" class="log-cover">
+                <div class="log-meta">
+                    <span class="stars">★★★★☆</span>
+                    <span class="date">2026.05.15</span>
+                </div>
+            </li>
+
+            <li class="log-item">
+                <img src="img/log3.jpg" alt="기록 3" class="log-cover">
+                <div class="log-meta">
+                    <span class="stars">★★★★★</span>
+                    <span class="date">2026.05.01</span>
+                </div>
+            </li>
+
+            <li class="log-item">
+                <img src="img/log4.jpg" alt="기록 4" class="log-cover">
+                <div class="log-meta">
+                    <span class="stars">★★★☆☆</span>
+                    <span class="date">2026.04.28</span>
+                </div>
+            </li>
+        </ul>
+    </section>
+    
+    <aside id="tracker" class="c_m_12 c_3">
+        <h4>Archive Tracker</h4>
+        
+        <div class="tracker-box">
+            <h5>🖼️ Total Logs</h5>
+            <div class="tracker-stat" style="margin-top: 10px;">
+                <span>누적 기록 수</span><strong>34개</strong>
+            </div>
+            <div class="tracker-stat" style="margin-top: 8px;">
+                <span>이번 달 기록</span><strong>5개</strong>
+            </div>
+        </div>
+    </aside>
+
+    <footer class="c_12">
+        COPYRIGHT(C) 유은지 All Rights Reserved.
+    </footer>
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quote</title>
+    <style>
+        /* 공통 */
+        * {
+            box-sizing: border-box; 
+            margin: 0; padding: 0;
+        }
+        ul {
+            list-style-type: none;
+        }
+        body {
+            font-family: "Pretendard", "Malgun Gothic", "돋움", sans-serif;
+            font-size: 100%;
+            background-color: #f8f9fa;
+            color: #2c3e50;
+        }
+        
+        /* 반응형 */
+        [class*="c_"] {
+            float: left; padding: 15px; width: 100%;
+        }
+        @media only screen and (min-width: 600px) {
+            .c_m_3 {width: 25%;}
+            .c_m_6 {width: 50%;}
+            .c_m_9 {width: 75%;}
+            .c_m_12 {width: 100%;}
+        }
+        @media only screen and (min-width: 768px) {
+            .c_3 {width: 25%;}
+            .c_6 {width: 50%;}
+            .c_12 {width: 100%;}
+        }
+
+        /* 헤더 */
+        header {
+            padding: 35px 20px;
+            background-color: #1e272e;
+            color: #ffffff;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 1.8em;
+            font-weight: 600;
+            letter-spacing: -1px;
+        }
+        header h1 a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* left 메뉴 */
+        aside#menu {
+            padding-top: 25px;
+        }
+        aside#menu ul {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        aside#menu li {
+            background-color: #ffffff;
+            color: #57606f;
+            font-weight: 500;
+            border: 1px solid #e4e7eb;
+            border-radius: 6px;
+        }
+        aside#menu a {
+            display: block;      
+            padding: 12px 16px;  
+            text-decoration: none; 
+            color: inherit;      
+            border-radius: 6px;  
+        }
+        aside#menu li:hover, aside#menu li.active {
+            background-color: #2c3e50;
+            color: #ffffff;
+            border-color: #2c3e50;
+        }
+        footer {
+            padding: 30px 10px;
+            clear: both;
+            text-align: center;
+            background-color: #1e272e;
+            color: #718093;
+            font-size: 0.85em;
+        }
+
+        /* 메인 컨텐츠 공통 영역 */
+        section#main {
+            padding: 25px 20px;
+        }
+        section#main h1.page-title {
+            font-size: 1.6em;
+            color: #1e272e;
+            margin-bottom: 18px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e4e7eb;
+        }
+
+        /* quote 페이지만 */
+        .quote-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .quote-item {
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            border: 1px solid #e4e7eb;
+            border-radius: 8px;
+            padding: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+        }
+        .quote-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        /* Book / Film 분류 */
+        .quote-type {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+        .type-book {
+            background-color: #e3fafc;
+            color: #1098ad;
+        }
+        .type-film {
+            background-color: #fff0f6;
+            color: #d6336c;
+        }
+
+        /* 서체 */
+        .quote-text {
+            font-size: 1.1em;
+            font-weight: 500;
+            line-height: 1.6;
+            color: #1e272e;
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 3px solid #ced4da;
+        }
+        .quote-item.book-card .quote-text {
+            border-left-color: #a5d8ff;
+        }
+        .quote-item.film-card .quote-text {
+            border-left-color: #ff85a2;
+        }
+
+        /* 제목, 작가/감독 */
+        .quote-source {
+            font-size: 0.9em;
+            color: #57606f;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .quote-source .title {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        /* 하단 날짜 / 타임스탬프 */
+        .quote-meta {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px dashed #f1f3f5;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            color: #95a5a6;
+        }
+
+        /* 영화 타임스탬프 */
+        .timestamp {
+            background-color: #f8f9fa;
+            color: #e67e22;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+            border: 1px solid #ffe8cc;
+        }
+
+        /* 책 페이지스탬프 */
+        .page-stamp {
+            background-color: #f8f9fa;
+            color: #1098ad;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9em;
+            border: 1px solid #c5f2f7;
+        }
+
+        /* right 트래커 */
+        aside#tracker {
+            padding-top: 25px;
+        }
+        aside#tracker h4 {
+            font-size: 1.1em;
+            color: #1e272e;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .tracker-box {
+            background-color: #ffffff;
+            border: 1px solid #e4e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+        }
+        .tracker-box h5 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        .tracker-stat {
+            font-size: 0.85em;
+            color: #57606f;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <header class="c_12">
+        <h1><a href="index.html">📖</a></h1>
+    </header>
+
+    <aside id="menu" class="c_m_3 c_3">
+        <ul>
+            <li><a href="calendar.html">Calendar</a></li> 
+            <li><a href="book.html">Book</a></li>
+            <li><a href="film.html">Film</a></li>
+            <li class="active"><a href="quote.html">Quote</a></li>
+            <li><a href="log.html">Log</a></li>
+        </ul>
+    </aside>
+
+    <section id="main" class="c_m_9 c_6">
+        <h1 class="page-title">Quote</h1>
+        
+        <ul class="quote-list">
+            
+            <li class="quote-item book-card">
+                <div>
+                    <span class="quote-type type-book">📚 Book</span>
+                </div>
+                <p class="quote-text">"책 구절"</p>
+                <div class="quote-source">
+                    <span class="title">책 제목</span>
+                    <span class="author">| 작가명</span>
+                </div>
+                <div class="quote-meta">
+                    <span class="date">2026.05.26</span>
+                    <span class="page-stamp">📖 124 p</span> 
+                </div>
+            </li>
+
+            <li class="quote-item film-card">
+                <div>
+                    <span class="quote-type type-film">🎬 Film</span>
+                </div>
+                <p class="quote-text">"영화 대사"</p>
+                <div class="quote-source">
+                    <span class="title">영화 제목</span>
+                    <span class="director">| 감독명</span>
+                </div>
+                <div class="quote-meta">
+                    <span class="date">2026.05.20</span>
+                    <span class="timestamp">⏱️ 01:42:15</span> 
+                </div>
+            </li>
+        </ul>
+    </section>
+    
+    <aside id="tracker" class="c_m_12 c_3">
+        <h4>Quote Tracker</h4>
+        
+        <div class="tracker-box">
+            <h5>✍️ 수집 현황</h5>
+            <div class="tracker-stat" style="margin-top: 10px;">
+                <span>이번 달 수집</span><strong>15개</strong>
+            </div>
+            <div class="tracker-stat" style="margin-top: 8px;">
+                <span>📚 책</span><strong>6개</strong>
+            </div>
+            <div class="tracker-stat" style="margin-top: 8px;">
+                <span>🎬 영화</span><strong>9개</strong>
+            </div>
+        </div>
+    </aside>
+
+    <footer class="c_12">
+        COPYRIGHT(C) 유은지 All Rights Reserved.
+    </footer>
+</body>
+</html>
