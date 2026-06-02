@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>film</title>
+    <style>
+        /* 공통 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #fbf9f4;
+            color: #3e2723;
+            line-height: 1.7;
+        }
+        
+        /* 헤더 & 푸터 */
+        header, footer {
+            background-color: #4e3629;
+            color: #f5f2eb;
+            text-align: center;
+            padding: 25px 20px;
+        }
+        header h1 {
+            font-weight: bold;
+            font-size: 2em;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        header h1 a {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header h1 a:hover {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header p {
+            font-size: 0.95em;
+            color: #d7ccc8;
+        }
+
+        /* 레이아웃 구분 */
+        .container {
+            overflow: auto;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* left : 메뉴 */
+        .menu {
+            float: left;
+            width: 20%;
+            text-align: center;
+        }
+        .menu a {
+            background-color: #ebdccb;
+            padding: 12px;
+            margin-top: 7px;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .menu a:link, .menu a:visited {
+            text-decoration: none;
+            color: #5d4037;
+        }
+        .menu a:hover {
+            background-color: #8d6e63;
+            color: #ffffff;
+        }
+        .menu a:active, .menu a.active {
+            background-color: #4e3629;
+            color: #ffffff;
+        }
+
+        /* center : 메인 */
+        .main {
+            float: left;
+            width: 60%;
+            padding: 0 25px;
+        }
+        .page-title {
+            font-size: 1.6em;
+            color: #4e3629;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #8d6e63;
+        }
+        .film-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .film-item {
+            display: flex;
+            gap: 20px;
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .film-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(78, 54, 41, 0.12);
+        }
+        .film-poster {
+            width: 110px;
+            flex-shrink: 0;
+        }
+        .film-poster img {
+            width: 100%;
+            height: 155px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(78, 54, 41, 0.15);
+        }
+        .film-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        .film-info h3 {
+            font-size: 1.3em;
+            color: #4e3629;
+            margin-bottom: 10px;
+        }
+        .film-info p {
+            font-size: 0.95em;
+            color: #5d4037;
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+        .film-info .label {
+            font-weight: bold;
+            color: #4e3629;
+            margin-right: 5px;
+        }
+        .film-status {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: bold;
+            width: fit-content;
+        }
+        .status-plan { background-color: #f3e9dc; color: #8d6e63; }
+        .status-watching { background-color: #ebdccb; color: #5d4037; }
+        .status-done { background-color: #a1887f; color: #ffffff; }
+        
+        .film-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: flex-start;
+            padding-top: 5px;
+            gap: 8px;
+        }
+        .film-meta .date {
+            font-size: 0.85em;
+            color: #8d6e63;
+            font-weight: bold;
+        }
+        .film-meta .stars {
+            color: #d3a625;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+        }
+
+        /* right : 사이드바 */
+        .right {
+            background-color: #f3e9dc; 
+            float: left;
+            width: 20%;
+            padding: 20px;
+            margin-top: 7px;
+            border-radius: 4px;
+            border-left: 3px solid #8d6e63;
+        }
+        .right h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #4e3629;
+            border-bottom: 1px solid #d7ccc8;
+            padding-bottom: 5px;
+        }
+        .tracker-box {
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.04);
+        }
+        .tracker-box h5 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #4e3629;
+        }
+        .tracker-stat {
+            font-size: 0.85em;
+            color: #5d4037;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #ebdccb;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+        .progress-bar.film {
+            background-color: #a1887f;
+        }
+
+        /* add 버튼 */
+        .floating-add-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #8d6e63;
+            color: #ffffff;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(78, 54, 41, 0.3);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            z-index: 1000;
+        }
+        .floating-add-btn:hover {
+            background-color: #4e3629;
+            transform: translateY(-5px);
+        }
+
+        /* 반응형 */
+        @media only screen and (max-width: 768px) {
+            .menu, .main, .right {
+                width: 100%;
+                float: none;
+                padding: 10px 0;
+            }
+            .main { padding: 20px 5px; }
+            .film-item { flex-direction: column; }
+            .film-meta { align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Archive</a></h1>
+        <p>Book & Film</p>
+    </header>
+
+    <div class="container">
+        <div class="menu">
+            <a href="calendar.html">Calendar</a>
+            <a href="book.html">Books</a>
+            <a href="film.html" class="active">Films</a>
+            <a href="quote.html">Quotes</a>
+            <a href="log.html">Logs</a>
+        </div>
+
+        <div class="main">
+            <h1 class="page-title">Film Library</h1>
+            
+            <ul class="film-list">
+                <li class="film-item">
+                    <div class="film-poster">
+                        <img src="img/film0.jpg" alt="영화 포스터" onerror="this.src='https://via.placeholder.com/110x155?text=Film'">
+                    </div>
+                    <div class="film-info">
+                        <h3>영화 제목</h3>
+                        <p><span class="label">감독 :</span> </p>
+                        <p><span class="label">장르 :</span> </p>
+                        <span class="film-status status-plan">예정</span>
+                    </div>
+                    <div class="film-meta">
+                        <span class="date">-</span>
+                        <span class="stars">☆☆☆☆☆</span> 
+                    </div>
+                </li>
+
+                <li class="film-item">
+                    <div class="film-poster">
+                        <img src="img/film0.jpg" alt="영화 포스터" onerror="this.src='https://via.placeholder.com/110x155?text=Film'">
+                    </div>
+                    <div class="film-info">
+                        <h3>영화 제목</h3>
+                        <p><span class="label">감독 :</span> </p>
+                        <p><span class="label">장르 :</span> </p>
+                        <span class="film-status status-watching">보는 중</span>
+                    </div>
+                    <div class="film-meta">
+                        <span class="date">-</span>
+                        <span class="stars">☆☆☆☆☆</span>
+                    </div>
+                </li>
+
+                <li class="film-item">
+                    <div class="film-poster">
+                        <img src="img/film1.jpg" alt="영화 포스터" onerror="this.src='https://via.placeholder.com/110x155?text=Film'">
+                    </div>
+                    <div class="film-info">
+                        <h3>인터스텔라</h3>
+                        <p><span class="label">감독 :</span> 필 로드, 크리스토퍼 밀러</p>
+                        <p><span class="label">장르 :</span> SF</p>
+                        <span class="film-status status-done">완료</span>
+                    </div>
+                    <div class="film-meta">
+                        <span class="date">2026.05.11</span>
+                        <span class="stars">★★★★★</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="right">
+            <h3>Monthly Tracker</h3>
+            
+            <div class="tracker-box">
+                <h5>🎬 Film</h5>
+                <div class="tracker-stat">
+                    <span>누적 시청 시간</span><strong>3시간 36분</strong>
+                </div>
+                <div class="tracker-stat" style="margin-top: 10px;">
+                    <span>이번 달 목표 달성률</span><strong>75%</strong>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar film" style="width: 75%; height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="add.html" class="floating-add-btn" title="add">+</a>
+
+    <footer>
+        <p>COPYRIGHT © 유은지 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

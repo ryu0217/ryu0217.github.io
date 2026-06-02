@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+    <style>
+        /* 공통 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #fbf9f4;
+            color: #3e2723;
+            line-height: 1.7;
+        }
+        
+        /* 헤더 & 푸터 */
+        header, footer {
+            background-color: #4e3629;
+            color: #f5f2eb;
+            text-align: center;
+            padding: 25px 20px;
+        }
+        header h1 {
+            font-weight: bold;
+            font-size: 2em;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        header h1 a {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header h1 a:hover {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header p {
+            font-size: 0.95em;
+            color: #d7ccc8;
+        }
+
+        /* 레이아웃 구분 */
+        .container {
+            overflow: auto;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* left : 메뉴 */
+        .menu {
+            float: left;
+            width: 20%;
+            text-align: center;
+        }
+        .menu a {
+            background-color: #ebdccb;
+            padding: 12px;
+            margin-top: 7px;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .menu a:link, .menu a:visited {
+            text-decoration: none;
+            color: #5d4037;
+        }
+        .menu a:hover {
+            background-color: #8d6e63;
+            color: #ffffff;
+        }
+        .menu a:active {
+            background-color: #4e3629;
+            color: #ffffff;
+        }
+
+        /* center : 메인 */
+        .main {
+            float: left;
+            width: 60%;
+            padding: 0 25px;
+        }
+
+        .page-title {
+            font-size: 1.6em;
+            color: #4e3629;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #8d6e63;
+        }
+
+        .dashboard-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 35px;
+        }
+        .dashboard-card {
+            flex: 1;
+            min-width: 140px;
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 8px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(78, 54, 41, 0.12);
+        }
+        .dashboard-card .card-icon {
+            font-size: 2.2em;
+        }
+        .dashboard-card .card-info h5 {
+            font-size: 1.05em;
+            color: #4e3629;
+            margin-bottom: 4px;
+        }
+        .dashboard-card .card-info p {
+            font-size: 0.9em;
+            color: #8d6e63;
+            font-weight: 600;
+        }
+
+        .activity-section h3 {
+            font-size: 1.2em;
+            color: #4e3629;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .activity-item {
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 6px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            box-shadow: 0 2px 6px rgba(78, 54, 41, 0.03);
+        }
+        .activity-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .activity-badge {
+            font-size: 0.75em;
+            font-weight: 700;
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: #ffffff;
+        }
+        .activity-badge.book { background-color: #8d6e63; }
+        .activity-badge.film { background-color: #a1887f; }
+        .activity-badge.quote { background-color: #bcaaa4; }
+        
+        .activity-text {
+            font-size: 0.95em;
+            color: #3e2723;
+            font-weight: 500;
+        }
+        .activity-date {
+            font-size: 0.85em;
+            color: #8d6e63;
+            white-space: nowrap;
+        }
+
+        /* right : 사이드바 */
+        .right {
+            background-color: #f3e9dc; 
+            float: left;
+            width: 20%;
+            padding: 20px;
+            margin-top: 7px;
+            border-radius: 4px;
+            border-left: 3px solid #8d6e63;
+        }
+        .right h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #4e3629;
+            border-bottom: 1px solid #d7ccc8;
+            padding-bottom: 5px;
+        }
+
+        /* add 버튼 */
+        .floating-add-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #8d6e63;
+            color: #ffffff;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(78, 54, 41, 0.3);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            z-index: 1000;
+        }
+        .floating-add-btn:hover {
+            background-color: #4e3629;
+            transform: translateY(-5px);
+        }
+
+        /* 반응형 */
+        @media only screen and (max-width: 768px) {
+            .menu, .main, .right {
+                width: 100%;
+                float: none;
+                padding: 10px 0;
+            }
+            .main {
+                padding: 20px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Archive</a></h1>
+        <p>Book & Film</p>
+    </header>
+
+    <div class="container">
+        <div class="menu">
+            <a href="calendar.html">Calendar</a>
+            <a href="book.html">Books</a>
+            <a href="film.html">Films</a>
+            <a href="quote.html">Quotes</a>
+            <a href="log.html">Logs</a>
+        </div>
+
+        <div class="main">
+            <h1 class="page-title">Update</h1>
+            
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <div class="card-icon">📖</div>
+                    <div class="card-info">
+                        <h5>Books</h5>
+                        <p>Total 3</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon">🎬</div>
+                    <div class="card-info">
+                        <h5>Films</h5>
+                        <p>Total 3</p>
+                    </div>
+                </div>
+                <div class="dashboard-card">
+                    <div class="card-icon">✍️</div>
+                    <div class="card-info">
+                        <h5>Quotes</h5>
+                        <p>Total 1</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <h3>Recent Activity</h3>
+                <ul class="activity-list">
+                    <li class="activity-item">
+                        <div class="activity-left">
+                            <span class="activity-badge book">Book</span>
+                            <span class="activity-text">프로젝트 헤일메리 - 완독</span>
+                        </div>
+                        <span class="activity-date">Today</span>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-left">
+                            <span class="activity-badge film">Film</span>
+                            <span class="activity-text">인터스텔라 - 시청 중</span>
+                        </div>
+                        <span class="activity-date">Yesterday</span>
+                    </li>
+                    <li class="activity-item">
+                        <div class="activity-left">
+                            <span class="activity-badge quote">Quote</span>
+                            <span class="activity-text">"우리는 답을 찾을 것이다."</span>
+                        </div>
+                        <span class="activity-date">26.05.20</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="right">
+            <h3>Quote</h3>
+            <p style="font-size: 0.9em; color: #5d4037;">
+                "책은 우리 내부의 얼어붙은 바다를 깨는 도끼여야 한다."<br> - 프란츠 카프카
+            </p>
+            <br>
+            <h3>Goal of the month</h3>
+            <p style="font-size: 0.85em; color: #5d4037;">📖 4권 완독 / 5권 시작</p>
+            <p style="font-size: 0.85em; color: #5d4037;">🎬 3편 시청</p>
+        </div>
+    </div>
+
+    <a href="add.html" class="floating-add-btn" title="add">+</a>
+
+    <footer>
+        <p>COPYRIGHT © 유은지 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

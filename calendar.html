@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <style>
+        /* 공통 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #fbf9f4;
+            color: #3e2723;
+            line-height: 1.7;
+        }
+        
+        /* 헤더 & 푸터 */
+        header, footer {
+            background-color: #4e3629;
+            color: #f5f2eb;
+            text-align: center;
+            padding: 25px 20px;
+        }
+        header h1 {
+            font-weight: bold;
+            font-size: 2em;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        header h1 a {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header h1 a:hover {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header p {
+            font-size: 0.95em;
+            color: #d7ccc8;
+        }
+
+        /* 레이아웃 구분 */
+        .container {
+            overflow: auto;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* left : 메뉴 */
+        .menu {
+            float: left;
+            width: 20%;
+            text-align: center;
+        }
+        .menu a {
+            background-color: #ebdccb;
+            padding: 12px;
+            margin-top: 7px;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: #5d4037;
+        }
+        .menu a:hover {
+            background-color: #8d6e63;
+            color: #ffffff;
+        }
+        .menu a:active, .menu a.active {
+            background-color: #4e3629;
+            color: #ffffff;
+        }
+
+        /* center : 메인 */
+        .main {
+            float: left;
+            width: 60%;
+            padding: 0 25px;
+        }
+        .page-title {
+            font-size: 1.6em;
+            color: #4e3629;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #8d6e63;
+        }
+
+        /* calendar */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #4e3629;
+        }
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            text-align: center;
+        }
+        .day-name {
+            padding: 8px 0;
+            background-color: #ebdccb;
+            color: #4e3629;
+            font-weight: bold;
+            font-size: 0.9em;
+            border-radius: 4px;
+        }
+        .calendar-day {
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 4px;
+            min-height: 80px;
+            padding: 5px;
+            display: flex;
+            flex-direction: column;
+        }
+        .date-num {
+            font-size: 0.85em;
+            color: #8d6e63;
+            text-align: left;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        /* 표지/포스터 */
+        .record-item {
+            flex-grow: 1;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 4px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: block;
+        }
+        .record-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .record-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(78, 54, 41, 0.2);
+        }
+
+        .chk-toggle {
+            display: none;
+        }
+
+        /* 책/영화 정보 */
+        .info-panel {
+            display: none; 
+            margin-top: 25px;
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(78, 54, 41, 0.08);
+            gap: 20px;
+        }
+        #item1:checked ~ .info-panel-wrap #panel1 { display: flex; }
+        #item2:checked ~ .info-panel-wrap #panel2 { display: flex; }
+
+        /* 패널 내부 */
+        .info-img-box {
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .info-img-box img {
+            width: 100%;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(78, 54, 41, 0.15);
+        }
+        .info-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .info-details h3 {
+            font-size: 1.3em;
+            margin-bottom: 8px;
+            color: #4e3629;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+            font-weight: bold;
+            width: fit-content;
+            color: #ffffff;
+        }
+        .badge.book { background-color: #8d6e63; }
+        .badge.film { background-color: #a1887f; }
+
+        .info-details p {
+            font-size: 0.95em;
+            color: #5d4037;
+            margin-bottom: 5px;
+            line-height: 1.5;
+        }
+
+        /* right : 트래커 */
+        .right {
+            background-color: #f3e9dc; 
+            float: left;
+            width: 20%;
+            padding: 20px;
+            margin-top: 7px;
+            border-radius: 4px;
+            border-left: 3px solid #8d6e63;
+        }
+        .right h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #4e3629;
+            border-bottom: 1px solid #d7ccc8;
+            padding-bottom: 5px;
+        }
+
+        .tracker-box {
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.04);
+        }
+        .tracker-box h5 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #4e3629;
+        }
+        .tracker-stat {
+            font-size: 0.85em;
+            color: #5d4037;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .progress-container {
+            width: 100%;
+            background-color: #ebdccb;
+            border-radius: 10px;
+            height: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-bar.book { background-color: #8d6e63; }
+        .progress-bar.film { background-color: #a1887f; }
+
+        /* add 버튼 */
+        .floating-add-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #8d6e63;
+            color: #ffffff;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(78, 54, 41, 0.3);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            z-index: 1000;
+        }
+        .floating-add-btn:hover {
+            background-color: #4e3629;
+            transform: translateY(-5px);
+        }
+
+        /* 반응형 */
+        @media only screen and (max-width: 768px) {
+            .menu, .main, .right {
+                width: 100%;
+                float: none;
+                padding: 10px 0;
+            }
+            .main {
+                padding: 20px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Archive</a></h1>
+        <p>Book & Film</p>
+    </header>
+
+    <div class="container">
+        <div class="menu">
+            <a href="calendar.html" class="active">Calendar</a> <a href="book.html">Books</a>
+            <a href="film.html">Films</a>
+            <a href="quote.html">Quotes</a>
+            <a href="log.html">Logs</a>
+        </div>
+
+        <div class="main">
+            <h1 class="page-title">Calendar</h1>
+            
+            <input type="checkbox" id="item1" class="chk-toggle">
+            <input type="checkbox" id="item2" class="chk-toggle">
+            
+            <div class="calendar-header">
+                <span style="cursor: pointer;">&lt;</span>
+                <span>2026. 05</span>
+                <span style="cursor: pointer;">&gt;</span>
+            </div>
+
+            <div class="calendar-grid">
+                <div class="day-name">Sun</div><div class="day-name">Mon</div><div class="day-name">Tue</div>
+                <div class="day-name">Wed</div><div class="day-name">Thu</div><div class="day-name">Fri</div><div class="day-name">Sat</div>
+                
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num">1</span></div>
+                <div class="calendar-day"><span class="date-num">2</span></div>
+
+                <div class="calendar-day"><span class="date-num">3</span></div>
+                <div class="calendar-day"><span class="date-num">4</span></div>
+                <div class="calendar-day">
+                    <span class="date-num">5</span>
+                    <label for="item1" class="record-item">
+                        <img src="img/book1.jpg" alt="book">
+                    </label>
+                </div>
+                <div class="calendar-day"><span class="date-num">6</span></div>
+                <div class="calendar-day"><span class="date-num">7</span></div>
+                <div class="calendar-day"><span class="date-num">8</span></div>
+                <div class="calendar-day"><span class="date-num">9</span></div>
+
+                <div class="calendar-day"><span class="date-num">10</span></div>
+                <div class="calendar-day">
+                    <span class="date-num">11</span>
+                    <label for="item2" class="record-item">
+                        <img src="img/film1.jpg" alt="film">
+                    </label>
+                </div>
+                <div class="calendar-day"><span class="date-num">12</span></div>
+                <div class="calendar-day"><span class="date-num">13</span></div>
+                <div class="calendar-day"><span class="date-num">14</span></div>
+                <div class="calendar-day"><span class="date-num">15</span></div>
+                <div class="calendar-day"><span class="date-num">16</span></div>
+
+                <div class="calendar-day"><span class="date-num">17</span></div>
+                <div class="calendar-day"><span class="date-num">18</span></div>
+                <div class="calendar-day"><span class="date-num">19</span></div>
+                <div class="calendar-day"><span class="date-num">20</span></div>
+                <div class="calendar-day"><span class="date-num">21</span></div>
+                <div class="calendar-day"><span class="date-num">22</span></div>
+                <div class="calendar-day"><span class="date-num">23</span></div>
+
+                <div class="calendar-day"><span class="date-num">24</span></div>
+                <div class="calendar-day"><span class="date-num">25</span></div>
+                <div class="calendar-day"><span class="date-num">26</span></div>
+                <div class="calendar-day"><span class="date-num">27</span></div>
+                <div class="calendar-day"><span class="date-num">28</span></div>
+                <div class="calendar-day"><span class="date-num">29</span></div>
+                <div class="calendar-day"><span class="date-num">30</span></div>
+
+                <div class="calendar-day"><span class="date-num">31</span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+                <div class="calendar-day"><span class="date-num"></span></div>
+            </div>
+
+            <div class="info-panel-wrap">
+                <div class="info-panel" id="panel1">
+                    <div class="info-img-box">
+                        <img src="img/book1.jpg" alt="상세 이미지" >
+                    </div>
+                    <div class="info-details">
+                        <span class="badge book">Book</span>
+                        <h3>프로젝트 헤일메리</h3>
+                        <p>읽은 시간 : 6시간 20분</p>
+                        <p>진행 상태 : 완독 (100%)</p>
+                    </div>
+                </div>
+
+                <div class="info-panel" id="panel2">
+                    <div class="info-img-box">
+                        <img src="img/film1.jpg" alt="상세 이미지">
+                    </div>
+                    <div class="info-details">
+                        <span class="badge film">Film</span>
+                        <h3>프로젝트 헤일메리</h3>
+                        <p>시청 시간 : 2시간 36분</p>
+                        <p>진행 상태 : 시청 완료 (100%)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <h3>Monthly Tracker</h3>
+            
+            <div class="tracker-box">
+                <h5>📖 Book</h5>
+                <div class="tracker-stat">
+                    <span>누적 읽은 시간</span><strong>9시간 20분</strong>
+                </div>
+                <div class="tracker-stat" style="margin-top: 10px;">
+                    <span>이번 달 완독률</span><strong>60%</strong>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar book" style="width: 60%; height: 100%;"></div>
+                </div>
+            </div>
+
+            <div class="tracker-box">
+                <h5>🎬 Film</h5>
+                <div class="tracker-stat">
+                    <span>누적 시청 시간</span><strong>3시간 36분</strong>
+                </div>
+                <div class="tracker-stat" style="margin-top: 10px;">
+                    <span>이번 달 시청률</span><strong>75%</strong>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar film" style="width: 75%; height: 100%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="add.html" class="floating-add-btn" title="add">+</a>
+
+    <footer>
+        <p>COPYRIGHT © 유은지 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

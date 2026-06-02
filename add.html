@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Record - My Bookshelf</title>
+    <style>
+        /* 공통 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #fbf9f4;
+            color: #3e2723;
+            line-height: 1.7;
+        }
+        
+        /* 헤더 & 푸터 */
+        header, footer {
+            background-color: #4e3629;
+            color: #f5f2eb;
+            text-align: center;
+            padding: 25px 20px;
+        }
+        header h1 {
+            font-weight: bold;
+            font-size: 2em;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        header h1 a {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header h1 a:hover {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header p {
+            font-size: 0.95em;
+            color: #d7ccc8;
+        }
+
+        /* 레이아웃 구분 */
+        .container {
+            overflow: auto;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* left : 메뉴 */
+        .menu {
+            float: left;
+            width: 20%;
+            text-align: center;
+        }
+        .menu a {
+            background-color: #ebdccb;
+            padding: 12px;
+            margin-top: 7px;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .menu a:link, .menu a:visited {
+            text-decoration: none;
+            color: #5d4037;
+        }
+        .menu a:hover {
+            background-color: #8d6e63;
+            color: #ffffff;
+        }
+        .menu a:active, .menu a.active {
+            background-color: #4e3629;
+            color: #ffffff;
+        }
+
+        /* center : 메인 */
+        .main {
+            float: left;
+            width: 60%;
+            padding: 0 25px;
+        }
+
+        .page-title {
+            font-size: 1.6em;
+            color: #4e3629;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #8d6e63;
+        }
+
+        /* 입력 폼 */
+        .form-box {
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.05);
+            margin-bottom: 35px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #4e3629;
+            margin-bottom: 8px;
+        }
+        .form-group input, 
+        .form-group select, 
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d7ccc8;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 1em;
+            color: #3e2723;
+        }
+        .form-group textarea {
+            resize: vertical;
+            height: 100px;
+        }
+        .submit-btn {
+            background-color: #8d6e63;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            font-size: 1.05em;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s ease;
+        }
+        .submit-btn:hover {
+            background-color: #4e3629;
+        }
+
+        /* 테이블 */
+        .section-subtitle {
+            font-size: 1.2em;
+            color: #4e3629;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.05);
+        }
+        .summary-table th, .summary-table td {
+            border: 1px solid #d7ccc8;
+            padding: 12px;
+            text-align: center;
+        }
+        .summary-table th {
+            background-color: #ebdccb;
+            color: #4e3629;
+            font-weight: bold;
+        }
+        .summary-table .total-row {
+            background-color: #f3e9dc;
+            font-weight: bold;
+            color: #4e3629;
+        }
+
+        /* right : 사이드바 */
+        .right {
+            background-color: #f3e9dc; 
+            float: left;
+            width: 20%;
+            padding: 20px;
+            margin-top: 7px;
+            border-radius: 4px;
+            border-left: 3px solid #8d6e63;
+        }
+        .right h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #4e3629;
+            border-bottom: 1px solid #d7ccc8;
+            padding-bottom: 5px;
+        }
+        .guide-box {
+            font-size: 0.9em;
+            color: #5d4037;
+            line-height: 1.8;
+        }
+
+        /* 반응형 */
+        @media only screen and (max-width: 768px) {
+            .menu, .main, .right {
+                width: 100%;
+                float: none;
+                padding: 10px 0;
+            }
+            .main {
+                padding: 20px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Archive</a></h1>
+        <p>Book & Film</p>
+    </header>
+
+    <div class="container">
+        <div class="menu">
+            <a href="calendar.html">Calendar</a>
+            <a href="book.html">Books</a>
+            <a href="film.html">Films</a>
+            <a href="quote.html">Quotes</a>
+            <a href="log.html">Logs</a>
+        </div>
+
+        <div class="main">
+            <h1 class="page-title">Add</h1>
+            
+            <div class="form-box">
+                <form action="#" method="post">
+                    <div class="form-group">
+                        <label for="category">종류</label>
+                        <select id="category" name="category">
+                            <option value="book">📖 도서 (Book)</option>
+                            <option value="film">🎬 영화 (Film)</option>
+                            <option value="quote">✍️ 명언 (Quote)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="title">제목</label>
+                        <input type="text" id="title" name="title" placeholder="작품 제목 입력" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">날짜</label>
+                        <input type="date" id="date" name="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="rating">별점</label>
+                        <select id="rating" name="rating">
+                            <option value="5">★★★★★ (5점)</option>
+                            <option value="4">★★★★☆ (4점)</option>
+                            <option value="3">★★★☆☆ (3점)</option>
+                            <option value="2">★★☆☆☆ (2점)</option>
+                            <option value="1">★☆☆☆☆ (1점)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="review">메모</label>
+                        <textarea id="review" name="review" placeholder="기억에 남는 문장이나 감상 기록"></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">저장</button>
+                </form>
+            </div>
+
+            <h3 class="section-subtitle">요약 통계</h3>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>카테고리</th>
+                        <th>올해 목표</th>
+                        <th>현재 달성</th>
+                        <th>진행률</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>📖 도서</td>
+                        <td>10 권</td>
+                        <td>1 권</td>
+                        <td>10%</td>
+                    </tr>
+                    <tr>
+                        <td>🎬 영화</td>
+                        <td>10 편</td>
+                        <td>1 편</td>
+                        <td>10%</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="2">총 기록 수</td>
+                        <td colspan="2">2 개</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <div class="right">
+            <h3>Writing Guide</h3>
+            <div class="guide-box">
+                <p>- 즉시 기록할 것</p><br>
+                <p>- 구체적인 단어, 느낌을 적을 것</p><br>
+                <p>- 인상 깊었던 명대사나 구절 함께 적기</p><br>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>COPYRIGHT © 유은지 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>quote</title>
+    <style>
+        /* 공통 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        ul {
+            list-style: none;
+        }
+        body {
+            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+            background-color: #fbf9f4;
+            color: #3e2723;
+            line-height: 1.7;
+        }
+        
+        /* 헤더 & 푸터 */
+        header, footer {
+            background-color: #4e3629;
+            color: #f5f2eb;
+            text-align: center;
+            padding: 25px 20px;
+        }
+        header h1 {
+            font-weight: bold;
+            font-size: 2em;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        header h1 a {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header h1 a:hover {
+            color: #f5f2eb;
+            text-decoration: none;
+        }
+        header p {
+            font-size: 0.95em;
+            color: #d7ccc8;
+        }
+
+        /* 레이아웃 구분 */
+        .container {
+            overflow: auto;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* left : 메뉴 */
+        .menu {
+            float: left;
+            width: 20%;
+            text-align: center;
+        }
+        .menu a {
+            background-color: #ebdccb;
+            padding: 12px;
+            margin-top: 7px;
+            display: block;
+            width: 100%;
+            font-weight: bold;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .menu a:link, .menu a:visited {
+            text-decoration: none;
+            color: #5d4037;
+        }
+        .menu a:hover {
+            background-color: #8d6e63;
+            color: #ffffff;
+        }
+        .menu a:active, .menu a.active {
+            background-color: #4e3629;
+            color: #ffffff;
+        }
+
+        /* center : 메인 */
+        .main {
+            float: left;
+            width: 60%;
+            padding: 0 25px;
+        }
+        .page-title {
+            font-size: 1.6em;
+            color: #4e3629;
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #8d6e63;
+        }
+
+        .quote-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .quote-item {
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 8px;
+            padding: 22px;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.04);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .quote-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(78, 54, 41, 0.1);
+        }
+        .quote-type {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: bold;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin-bottom: 12px;
+            color: #ffffff;
+        }
+        .type-book { background-color: #8d6e63; }
+        .type-film { background-color: #a1887f; }
+
+        .quote-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            line-height: 1.6;
+            color: #4e3629;
+            margin-bottom: 12px;
+            padding-left: 12px;
+            border-left: 3px solid #d7ccc8;
+        }
+        .quote-item.book-card .quote-text { border-left-color: #8d6e63; }
+        .quote-item.film-card .quote-text { border-left-color: #a1887f; }
+
+        .quote-source {
+            font-size: 0.9em;
+            color: #5d4037;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .quote-source .title {
+            font-weight: bold;
+            color: #4e3629;
+        }
+        .quote-meta {
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px dashed #e0d5c1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            color: #8d6e63;
+        }
+        .timestamp, .page-stamp {
+            background-color: #f3e9dc;
+            color: #5d4037;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9em;
+            border: 1px solid #d7ccc8;
+        }
+
+        /* right : 사이드바 */
+        .right {
+            background-color: #f3e9dc; 
+            float: left;
+            width: 20%;
+            padding: 20px;
+            margin-top: 7px;
+            border-radius: 4px;
+            border-left: 3px solid #8d6e63;
+        }
+        .right h3 {
+            font-size: 1.1em;
+            margin-bottom: 12px;
+            color: #4e3629;
+            border-bottom: 1px solid #d7ccc8;
+            padding-bottom: 5px;
+        }
+        .tracker-box {
+            background-color: #ffffff;
+            border: 1px solid #d7ccc8;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(78, 54, 41, 0.03);
+        }
+        .tracker-box h5 {
+            font-size: 1em;
+            margin-bottom: 10px;
+            color: #4e3629;
+        }
+        .tracker-stat {
+            font-size: 0.85em;
+            color: #5d4037;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* add 버튼 */
+        .floating-add-btn {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            background-color: #8d6e63;
+            color: #ffffff;
+            width: 65px;
+            height: 65px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(78, 54, 41, 0.3);
+            transition: transform 0.2s ease, background-color 0.2s ease;
+            z-index: 1000;
+        }
+        .floating-add-btn:hover {
+            background-color: #4e3629;
+            transform: translateY(-5px);
+        }
+
+        /* 반응형 */
+        @media only screen and (max-width: 768px) {
+            .menu, .main, .right {
+                width: 100%;
+                float: none;
+                padding: 10px 0;
+            }
+            .main { padding: 20px 5px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">Archive</a></h1>
+        <p>Book & Film</p>
+    </header>
+
+    <div class="container">
+        <div class="menu">
+            <a href="calendar.html">Calendar</a>
+            <a href="book.html">Books</a>
+            <a href="film.html">Films</a>
+            <a href="quote.html" class="active">Quotes</a>
+            <a href="log.html">Logs</a>
+        </div>
+
+        <div class="main">
+            <h1 class="page-title">Quotes</h1>
+            
+            <ul class="quote-list">
+                <li class="quote-item book-card">
+                    <div>
+                        <span class="quote-type type-book">📖 Book</span>
+                    </div>
+                    <p class="quote-text">"-"</p>
+                    <div class="quote-source">
+                        <span class="title">프로젝트 헤일메리</span>
+                        <span class="author">| 앤디 위어</span>
+                    </div>
+                    <div class="quote-meta">
+                        <span class="date">2026.05.05</span>
+                        <span class="page-stamp">📖 124 p</span> 
+                    </div>
+                </li>
+
+                <li class="quote-item film-card">
+                    <div>
+                        <span class="quote-type type-film">🎬 Film</span>
+                    </div>
+                    <p class="quote-text">"Amaze Amaze Amaze"</p>
+                    <div class="quote-source">
+                        <span class="title">프로젝트 헤일메리</span>
+                        <span class="director">| 필 로드, 크리스토퍼 밀러</span>
+                    </div>
+                    <div class="quote-meta">
+                        <span class="date">2026.05.11</span>
+                        <span class="timestamp">⏱️ 01:42:15</span> 
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="right">
+            <h3>Quote Tracker</h3>
+            
+            <div class="tracker-box">
+                <h5>✍🏻 수집 현황</h5>
+                <div class="tracker-stat" style="margin-top: 10px;">
+                    <span>이번 달 수집</span><strong>2개</strong>
+                </div>
+                <div class="tracker-stat" style="margin-top: 8px;">
+                    <span>📖 책</span><strong>1개</strong>
+                </div>
+                <div class="tracker-stat" style="margin-top: 8px;">
+                    <span>🎬 영화</span><strong>1개</strong>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <a href="add.html" class="floating-add-btn" title="add">+</a>
+
+    <footer>
+        <p>COPYRIGHT © 유은지 All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
